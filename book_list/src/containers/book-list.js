@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectBook } from '../actions/index';
+import currentViewing from '../actions/index';
 import { bindActionCreators } from 'redux';
 
 class BookList extends Component {
   renderList() {
-    return this.props.books.map((book) => {
+    return this.props.booksList.map((book) => {
       return (
-        <li
-          key={book.title}
-          onClick={() => this.props.selectBook(book)}
-          className="list-group-item">
-          {book.title}
-        </li>
+          <li
+            key={book.title}
+            onClick={() => this.props.selectBook(book)}
+            className="list-group-item">
+            {book.title}
+          </li>
       );
     });
   }
 
   render() {
     return (
-      <ul className="list-group col-sm-4">
-        {this.renderList()}
-      </ul>
+      <div>
+        <button onClick={() => this.props.selectAllBooks(this.props.booksList)}>Show All Books</button>
+        <ul className="list-group">
+          {this.renderList()}
+        </ul>
+      </div>
     )
   }
 }
@@ -30,7 +33,7 @@ function mapStateToProps(state) {
   // Whatever is returned will show up as props
   // inside of BookList
   return {
-    books: state.books
+    booksList: state.booksList
   };
 }
 
@@ -39,7 +42,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
-  return bindActionCreators({ selectBook: selectBook }, dispatch);
+  return bindActionCreators({ selectBook: currentViewing.selectBook, selectAllBooks: currentViewing.selectAllBooks }, dispatch);
 }
 
 // Promote BookList from a component to a container - it needs to know
